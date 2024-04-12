@@ -568,7 +568,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   visualShadow: {fileID: 7866843675227412358}
   followSpeed: 20
-  rotationAmount: 40
+  rotationAmount: 55
   rotationSpeed: 20
   tiltAmount: 40
   tiltSpeed: 40
