@@ -13,9 +13,11 @@ public class CardVisual : MonoBehaviour
     private Card parentCard;
     private Transform cardTransform;
     private Vector3 rotationDelta;
-    private Transform handRotationChild;
-    private Transform firstChild;
-    private Transform secondChild;
+
+    //Different rotation parents
+    private Transform shakeParent;
+    private Transform tiltParent;
+    private Transform curveParent;
 
     [Header("References")]
     public Shadow visualShadow;
@@ -33,7 +35,9 @@ public class CardVisual : MonoBehaviour
     [SerializeField] private float positionCurveEffect = .1f;
     [SerializeField] private AnimationCurve rotationCurve;
     [SerializeField] private float rotationCurveEffect = 10f;
-    private float yOffset;
+
+    private float curveYOffset;
+    private float curveRotationOffset;
 
     private void Start()
     {
@@ -56,9 +60,9 @@ public class CardVisual : MonoBehaviour
         initalize = true;
 
         //Rotation Stuff
-        firstChild = transform.GetChild(0);
-        secondChild = firstChild.GetChild(0);
-        handRotationChild = secondChild.GetChild(0);
+        shakeParent = transform.GetChild(0);
+        tiltParent = shakeParent.GetChild(0);
+        curveParent = tiltParent.GetChild(0);
 
 
     }
@@ -80,33 +84,32 @@ public class CardVisual : MonoBehaviour
     {
         if (!initalize) return;
 
-        yOffset = positionCurve.Evaluate(parentCard.NormalizedPosition()) * positionCurveEffect;
-
-        float test = rotationCurve.Evaluate(parentCard.NormalizedPosition());
+        curveYOffset = positionCurve.Evaluate(parentCard.NormalizedPosition()) * positionCurveEffect;
+        curveRotationOffset = rotationCurve.Evaluate(parentCard.NormalizedPosition());
 
         //Smooth Follow
-        transform.position = Vector3.Lerp(transform.position, cardTransform.position + (Vector3.up * yOffset), followSpeed * Time.deltaTime);
+        transform.position = Vector3.Lerp(transform.position, cardTransform.position + (Vector3.up * curveYOffset), followSpeed * Time.deltaTime);
+
         //Smooth Rotate
         rotationDelta = Vector3.Lerp(rotationDelta, (transform.position - cardTransform.position) * rotationAmount, rotationSpeed * Time.deltaTime);
         transform.eulerAngles = new Vector3(transform.eulerAngles.x, transform.eulerAngles.y, rotationDelta.x);
-        //Tilt Logic
 
         //Hand Logic
+        curveParent.localEulerAngles = new Vector3(curveParent.localEulerAngles.x, curveParent.localEulerAngles.y, Mathf.LerpAngle(curveParent.localEulerAngles.z,parentCard.isDragging ? 0 : curveRotationOffset * -rotationCurveEffect, 5*Time.deltaTime));
 
-        if (parentCard.isDragging)
-            return;
-        //handRotationChild.localEulerAngles = new Vector3(handRotationChild.localEulerAngles.x, handRotationChild.localEulerAngles.y,parentCard.isDragging ? 0 : test * -rotationCurveEffect);
-        handRotationChild.localEulerAngles = new Vector3(handRotationChild.localEulerAngles.x, handRotationChild.localEulerAngles.y,test * -rotationCurveEffect);
+        //Tilt Logic
+        float sine =  Mathf.Sin(Time.time + parentCard.ParentIndex());
+        float cosine = Mathf.Cos(Time.time + parentCard.ParentIndex());
 
         Vector3 offset = transform.position - Camera.main.ScreenToWorldPoint(Input.mousePosition);
         float tiltX = parentCard.isHovering ? ((offset.y*-1) * tiltAmount) : 0;
         float tiltY = parentCard.isHovering ? ((offset.x) * (tiltAmount/1.5f)) : 0;
-        float tiltZ = parentCard.isDragging ? secondChild.eulerAngles.z : 0;
+        float tiltZ = parentCard.isDragging ? tiltParent.eulerAngles.z : 0;
 
-        float lerpX = Mathf.LerpAngle(secondChild.eulerAngles.x, tiltX, tiltSpeed * Time.deltaTime);
-        float lerpY = Mathf.LerpAngle(secondChild.eulerAngles.y, tiltY, tiltSpeed * Time.deltaTime);
-        float lerpZ = Mathf.LerpAngle(secondChild.eulerAngles.z,tiltZ, tiltSpeed/2 * Time.deltaTime);
-        secondChild.eulerAngles = new Vector3(lerpX, lerpY, lerpZ);
+        float lerpX = Mathf.LerpAngle(tiltParent.eulerAngles.x, tiltX + (sine*15), tiltSpeed * Time.deltaTime);
+        float lerpY = Mathf.LerpAngle(tiltParent.eulerAngles.y, tiltY + (cosine*15), tiltSpeed * Time.deltaTime);
+        float lerpZ = Mathf.LerpAngle(tiltParent.eulerAngles.z,tiltZ, tiltSpeed/2 * Time.deltaTime);
+        tiltParent.eulerAngles = new Vector3(lerpX, lerpY, lerpZ);
 
     }
 
@@ -134,7 +137,7 @@ public class CardVisual : MonoBehaviour
     {
         transform.DOScale(1.15f, .15f).SetEase(Ease.OutBack);
         DOTween.Kill(2, true);
-        firstChild.DOPunchRotation(Vector3.forward * 5, .15f, 20, 1).SetId(2);
+        shakeParent.DOPunchRotation(Vector3.forward * 5, .15f, 20, 1).SetId(2);
     }
     private void PointerExit(Card card)
     {
