@@ -318,16 +318,16 @@ MonoBehaviour:
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 0
-      inSlope: 6.961761
-      outSlope: 6.961761
+      value: 1
+      inSlope: -14.970659
+      outSlope: -14.970659
       tangentMode: 0
       weightedMode: 2
       inWeight: 0
-      outWeight: 0.20077813
+      outWeight: 0.09346782
     - serializedVersion: 3
       time: 0.5
-      value: 1
+      value: 0
       inSlope: 0
       outSlope: 0
       tangentMode: 136
@@ -336,17 +336,17 @@ MonoBehaviour:
       outWeight: 0.33333334
     - serializedVersion: 3
       time: 1
-      value: 0
-      inSlope: -6.8714356
-      outSlope: -6.8714356
+      value: 1
+      inSlope: 13.222984
+      outSlope: 13.222984
       tangentMode: 0
       weightedMode: 1
-      inWeight: 0.20233536
+      inWeight: 0.102400064
       outWeight: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  positionCurveEffect: 0.1
+  positionCurveEffect: -0.2
   rotationCurve:
     serializedVersion: 2
     m_Curve:
@@ -380,7 +380,7 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  rotationCurveEffect: 5
+  rotationCurveEffect: 10
 --- !u!223 &4132845374223140069
 Canvas:
   m_ObjectHideFlags: 0
