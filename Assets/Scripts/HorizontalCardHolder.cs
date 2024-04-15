@@ -28,9 +28,15 @@ public class HorizontalCardHolder : MonoBehaviour
             card.DeselectEvent.AddListener(CardDeselected);
         }
 
-        for (int i = 0; i < cards.Length; i++)
+        StartCoroutine(Frame());
+
+        IEnumerator Frame()
         {
-            cards[i].cardVisual.UpdateIndex(transform.childCount);
+            yield return new WaitForEndOfFrame();
+            for (int i = 0; i < cards.Length; i++)
+            {
+                cards[i].cardVisual.UpdateIndex(transform.childCount);
+            }
         }
     }
 
