@@ -3,13 +3,14 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using DG.Tweening;
 
 public class HorizontalCardHolder : MonoBehaviour
 {
 
     private RectTransform rect;
-    private NewCard[] cards;
-    [SerializeField] private NewCard focusedCard;
+    private Card[] cards;
+    [SerializeField] private Card focusedCard;
 
     public AnimationCurve handStyle;
     public float handStyleAmount = .2f;
@@ -19,9 +20,9 @@ public class HorizontalCardHolder : MonoBehaviour
     void Start()
     {
         rect = GetComponent<RectTransform>();
-        cards = GetComponentsInChildren<NewCard>();
+        cards = GetComponentsInChildren<Card>();
 
-        foreach (NewCard card in cards)
+        foreach (Card card in cards)
         {
             card.SelectEvent.AddListener(CardSelected);
             card.DeselectEvent.AddListener(CardDeselected);
@@ -30,24 +31,18 @@ public class HorizontalCardHolder : MonoBehaviour
         for (int i = 0; i < cards.Length; i++)
         {
             cards[i].cardVisual.UpdateIndex(transform.childCount);
-            float yPosition = handStyle.Evaluate(Remap(i, 0, (float)cards.Length - 1, 0, 1));
-            cards[i].transform.localPosition = new Vector3(cards[i].transform.localPosition.x, yPosition *handStyleAmount, cards[i].transform.localPosition.z);
         }
     }
 
-    public float Remap(float value, float from1, float to1, float from2, float to2)
-    {
-        return (value - from1) / (to1 - from1) * (to2 - from2) + from2;
-    }
-
-    void CardSelected(NewCard card)
+    void CardSelected(Card card)
     {
         focusedCard = card;
     }
 
-    void CardDeselected(NewCard card)
+    void CardDeselected(Card card)
     {
-        focusedCard.transform.localPosition = Vector3.zero;
+        //focusedCard.transform.localPosition = Vector3.zero;
+        focusedCard.transform.DOLocalMove(Vector3.zero, .15f).SetEase(Ease.OutBack);
 
         rect.sizeDelta += Vector2.right;
         rect.sizeDelta -= Vector2.right;
@@ -66,7 +61,7 @@ public class HorizontalCardHolder : MonoBehaviour
             {
                 if (focusedCard.transform.position.x > cards[i].transform.position.x)
                 {
-                    if (focusedCard.transform.parent.GetSiblingIndex() > cards[i].transform.parent.GetSiblingIndex())
+                    if (focusedCard.ParentIndex() > cards[i].ParentIndex())
                     {
                         Swap(i);
                         break;
@@ -75,7 +70,7 @@ public class HorizontalCardHolder : MonoBehaviour
 
                 if (focusedCard.transform.position.x < cards[i].transform.position.x)
                 {
-                    if (focusedCard.transform.parent.GetSiblingIndex() < cards[i].transform.parent.GetSiblingIndex())
+                    if (focusedCard.ParentIndex() < cards[i].ParentIndex())
                     {
                         Swap(i);
                         break;
@@ -98,7 +93,7 @@ public class HorizontalCardHolder : MonoBehaviour
         isCrossing = false;
 
         //Updated Visual Indexes
-        foreach (NewCard card in cards)
+        foreach (Card card in cards)
         {
             card.cardVisual.UpdateIndex(transform.childCount);
         }

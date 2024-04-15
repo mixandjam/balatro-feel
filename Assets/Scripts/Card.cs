@@ -4,30 +4,32 @@ using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class NewCard : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHandler, ISelectHandler, IDeselectHandler, IPointerEnterHandler, IPointerExitHandler, IPointerUpHandler
+public class Card : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHandler, ISelectHandler, IDeselectHandler, IPointerEnterHandler, IPointerExitHandler, IPointerUpHandler
 {
     private Canvas canvas;
+    private Image imageComponent;
+    private VisualCardsHandler? visualHandler;
+    private Vector3 offset;
 
     [Header("Visual")]
     [SerializeField] private GameObject cardVisualPrefab;
     [HideInInspector] public CardVisual cardVisual;
-    private VisualCardsHandler? visualHandler;
 
-    [Header("Logic")]
+    [Header("States")]
     public bool isHovering;
     public bool isDragging;
 
     [Header("Events")]
-    [HideInInspector] public UnityEvent<NewCard> SelectEvent;
-    [HideInInspector] public UnityEvent<NewCard> DeselectEvent;
-    [HideInInspector] public UnityEvent<NewCard> PointerEnterEvent;
-    [HideInInspector] public UnityEvent<NewCard> PointerExitEvent;
+    [HideInInspector] public UnityEvent<Card> SelectEvent;
+    [HideInInspector] public UnityEvent<Card> DeselectEvent;
+    [HideInInspector] public UnityEvent<Card> PointerEnterEvent;
+    [HideInInspector] public UnityEvent<Card> PointerExitEvent;
 
     void Start()
     {
         canvas = GetComponentInParent<Canvas>();
+        imageComponent = GetComponent<Image>();
         visualHandler = FindObjectOfType<VisualCardsHandler>();
-
         cardVisual = Instantiate(cardVisualPrefab, visualHandler ? visualHandler.transform : canvas.transform).GetComponent<CardVisual>();
         cardVisual.Initialize(this);
     }
@@ -38,15 +40,9 @@ public class NewCard : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragH
 
         if (isDragging)
         {
-            Vector2 targetPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-
-            // Calculate the direction towards the target position
+            Vector2 targetPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition) - offset;
             Vector2 direction = (targetPosition - (Vector2)transform.position).normalized;
-
-            // Calculate the limited velocity
-            Vector2 velocity = direction * Mathf.Min(30, Vector2.Distance(transform.position, targetPosition) / Time.deltaTime);
-
-            // Update object position based on velocity
+            Vector2 velocity = direction * Mathf.Min(50, Vector2.Distance(transform.position, targetPosition) / Time.deltaTime);
             transform.Translate(velocity * Time.deltaTime);
         }
     }
@@ -62,13 +58,13 @@ public class NewCard : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragH
 
     public void OnBeginDrag(PointerEventData eventData)
     {
+        Vector2 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        offset = mousePosition - (Vector2)transform.position;
         isDragging = true;
     }
 
     public void OnDrag(PointerEventData eventData)
     {
-        //Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        //transform.position = new Vector3(mousePos.x, mousePos.y, 0);
     }
 
     public void OnEndDrag(PointerEventData eventData)
@@ -79,26 +75,27 @@ public class NewCard : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragH
     public void OnSelect(BaseEventData eventData)
     {
         SelectEvent.Invoke(this);
-        GetComponent<Image>().raycastTarget = false;
+        imageComponent.raycastTarget = false;
+        canvas.GetComponent<GraphicRaycaster>().enabled = false;
     }
 
     public void OnDeselect(BaseEventData eventData)
     {
         DeselectEvent.Invoke(this);
-        GetComponent<Image>().raycastTarget = true;
+        imageComponent.raycastTarget = true;
+        canvas.GetComponent<GraphicRaycaster>().enabled = true;
+
     }
 
     public void OnPointerEnter(PointerEventData eventData)
     {
         PointerEnterEvent.Invoke(this);
-
         isHovering = true;
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
         PointerExitEvent.Invoke(this);
-
         isHovering = false;
     }
 
@@ -110,5 +107,20 @@ public class NewCard : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragH
     void Release()
     {
         EventSystem.current.SetSelectedGameObject(null);
+    }
+
+    public int ParentIndex()
+    {
+        return transform.parent.GetSiblingIndex();
+    }
+
+    public float NormalizedPosition()
+    {
+        return Remap((float)ParentIndex(), 0, (float)(transform.parent.parent.childCount-1), 0, 1);
+    }
+
+    public float Remap(float value, float from1, float to1, float from2, float to2)
+    {
+        return (value - from1) / (to1 - from1) * (to2 - from2) + from2;
     }
 }
