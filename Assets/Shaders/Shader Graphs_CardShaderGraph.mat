@@ -42,10 +42,15 @@ Material:
     m_Ints: []
     m_Floats:
     - _DisplacementIntensity: 0
+    - _Power: 1.5
     - _QueueControl: 0
     - _QueueOffset: 0
+    - _frequency: 1
     - _yDirection: 1
-    m_Colors: []
+    m_Colors:
+    - _Rotation: {r: 0, g: 0, b: 0, a: 0}
+    - _Tiling: {r: 1, g: 1, b: 0, a: 0}
+    - _Vector2: {r: -0.16, g: 0, b: 0, a: 0}
   m_BuildTextureStacks: []
 --- !u!114 &4944142543109189865
 MonoBehaviour:
