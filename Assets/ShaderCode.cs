@@ -30,13 +30,14 @@ public class ShaderCode : MonoBehaviour
 
         // Get the X-axis angle
         float xAngle = eulerAngles.x;
+        float yAngle = eulerAngles.y;
 
         // Ensure the X-axis angle stays within the range of -90 to 90 degrees
         xAngle = ClampAngle(xAngle, -90f, 90f);
+        yAngle = ClampAngle(yAngle, -90f, 90);
 
-        if (visual.parentCard.isDragging)
-        print(xAngle);
-        m.SetVector("_Rotation", new Vector2(Remap(xAngle,-20,20,-.5f,.5f), 0));
+
+        m.SetVector("_Rotation", new Vector2(Remap(xAngle,-20,20,-.5f,.5f), Remap(yAngle, -20, 20, -.5f, .5f)));
 
     }
 

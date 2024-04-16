@@ -15,12 +15,12 @@ public class CardVisual : MonoBehaviour
     private Vector3 rotationDelta;
 
     //Different rotation parents
-    private Transform shakeParent;
-    private Transform tiltParent;
-    private Transform curveParent;
+    [SerializeField]  private Transform shakeParent;
+    [SerializeField] private Transform tiltParent;
+    private int savedIndex;
 
     [Header("References")]
-    public Shadow visualShadow;
+    public Transform visualShadow;
     private Vector2 shadowDistance;
 
     [Header("Follow Parameters")]
@@ -29,7 +29,8 @@ public class CardVisual : MonoBehaviour
     [Header("Rotation Parameters")]
     [SerializeField] float rotationAmount = 20;
     [SerializeField] float rotationSpeed = 20;
-    [SerializeField] float tiltAmount = 20;
+    [SerializeField] float autoTiltAmount = 30;
+    [SerializeField] float manualTiltAmount = 20;
     [SerializeField] float tiltSpeed = 20;
     Vector3 movementDelta;
 
@@ -52,7 +53,7 @@ public class CardVisual : MonoBehaviour
 
     private void Start()
     {
-        shadowDistance = visualShadow.effectDistance;
+        shadowDistance = visualShadow.localPosition;
     }
 
     public void Initialize(Card target, int index=0)
@@ -69,11 +70,6 @@ public class CardVisual : MonoBehaviour
 
         //Initialization
         initalize = true;
-
-        //Rotation Stuff
-        shakeParent = transform.GetChild(0);
-        tiltParent = shakeParent.GetChild(0);
-        curveParent = tiltParent.GetChild(0);
 
     }
 
@@ -109,16 +105,18 @@ public class CardVisual : MonoBehaviour
         transform.eulerAngles = new Vector3(transform.eulerAngles.x, transform.eulerAngles.y, Mathf.Clamp(rotationDelta.x,-60,60));
 
         //Tilt Logic
-        float sine = Mathf.Sin(Time.time + parentCard.ParentIndex()) * (parentCard.isDragging ? .5f : 1);
-        float cosine = Mathf.Cos(Time.time + parentCard.ParentIndex()) * (parentCard.isDragging ? .5f : 1);
+        savedIndex = parentCard.isDragging ? savedIndex : parentCard.ParentIndex();
+        float sine = Mathf.Sin(Time.time + savedIndex);
+        float cosine = Mathf.Cos(Time.time + savedIndex);
 
         Vector3 offset = transform.position - Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        float tiltX = parentCard.isHovering ? ((offset.y*-1) * tiltAmount) : 0;
-        float tiltY = parentCard.isHovering ? ((offset.x) * (tiltAmount/1.5f)) : 0;
+        float tiltX = parentCard.isHovering ? ((offset.y*-1) * manualTiltAmount) : 0;
+        float tiltY = parentCard.isHovering ? ((offset.x) * manualTiltAmount) : 0;
         float tiltZ = parentCard.isDragging ? tiltParent.eulerAngles.z : (curveRotationOffset * -rotationCurveEffect);
+        //float tiltZ = tiltParent.eulerAngles.z;
 
-        float lerpX = Mathf.LerpAngle(tiltParent.eulerAngles.x, tiltX + (sine*15), tiltSpeed * Time.deltaTime);
-        float lerpY = Mathf.LerpAngle(tiltParent.eulerAngles.y, tiltY + (cosine*15), tiltSpeed * Time.deltaTime);
+        float lerpX = Mathf.LerpAngle(tiltParent.eulerAngles.x, tiltX + (sine* autoTiltAmount), tiltSpeed * Time.deltaTime);
+        float lerpY = Mathf.LerpAngle(tiltParent.eulerAngles.y, tiltY + (cosine* autoTiltAmount), tiltSpeed * Time.deltaTime);
         float lerpZ = Mathf.LerpAngle(tiltParent.eulerAngles.z,tiltZ, tiltSpeed/2 * Time.deltaTime);
 
         tiltParent.eulerAngles = new Vector3(lerpX, lerpY, lerpZ);
@@ -135,7 +133,8 @@ public class CardVisual : MonoBehaviour
         GetComponent<Canvas>().overrideSorting = true;
         transform.DOScale(scaleOnSelect, scaleTransition).SetEase(scaleEase);
 
-        visualShadow.effectDistance += (-Vector2.up * 20);
+        visualShadow.localPosition += (-Vector3.up * 20);
+        visualShadow.GetComponent<Canvas>().overrideSorting = false;
     }
 
     private void Deselect(Card card)
@@ -143,7 +142,9 @@ public class CardVisual : MonoBehaviour
         GetComponent<Canvas>().overrideSorting = false;
         transform.DOScale(1, scaleTransition*2).SetEase(scaleEase);
 
-        visualShadow.effectDistance = shadowDistance;
+        visualShadow.localPosition = shadowDistance;
+        visualShadow.GetComponent<Canvas>().overrideSorting = true;
+
     }
     private void PointerEnter(Card card)
     {
