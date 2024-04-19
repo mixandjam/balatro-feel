@@ -10,43 +10,37 @@ public class CardVisual : MonoBehaviour
 {
     private bool initalize = false;
 
+    [Header("Card")]
     public Card parentCard;
     private Transform cardTransform;
     private Vector3 rotationDelta;
-
-    //Different rotation parents
-    [SerializeField]  private Transform shakeParent;
-    [SerializeField] private Transform tiltParent;
     private int savedIndex;
+    Vector3 movementDelta;
 
     [Header("References")]
     public Transform visualShadow;
     private Vector2 shadowDistance;
+    [SerializeField]  private Transform shakeParent;
+    [SerializeField] private Transform tiltParent;
 
     [Header("Follow Parameters")]
-    [SerializeField] float followSpeed = 30;
+    public float followSpeed = 30;
 
     [Header("Rotation Parameters")]
-    [SerializeField] float rotationAmount = 20;
-    [SerializeField] float rotationSpeed = 20;
-    [SerializeField] float autoTiltAmount = 30;
-    [SerializeField] float manualTiltAmount = 20;
-    [SerializeField] float tiltSpeed = 20;
-    Vector3 movementDelta;
+    public float rotationAmount = 20;
+    public float rotationSpeed = 20;
+    public float autoTiltAmount = 30;
+    public float manualTiltAmount = 20;
+    public float tiltSpeed = 20;
 
     [Header("Scale Parameters")]
-    [SerializeField] float scaleOnHover = 1.15f;
-    [SerializeField] float scaleOnSelect = 1.25f;
-    [SerializeField] float scaleTransition = .15f;
-    [SerializeField] Ease scaleEase = Ease.OutBack;
-
-    [Header("Shake Parameters")]
+    public float scaleOnHover = 1.15f;
+    public float scaleOnSelect = 1.25f;
+    public float scaleTransition = .15f;
+    public Ease scaleEase = Ease.OutBack;
 
     [Header("Curve")]
-    [SerializeField] private AnimationCurve positionCurve;
-    [SerializeField] private float positionCurveEffect = .1f;
-    [SerializeField] private AnimationCurve rotationCurve;
-    [SerializeField] private float rotationCurveEffect = 10f;
+    [SerializeField] private CurveParameters curve;
 
     private float curveYOffset;
     private float curveRotationOffset;
@@ -75,27 +69,19 @@ public class CardVisual : MonoBehaviour
 
     public void UpdateIndex(int length)
     {
-        transform.SetSiblingIndex(GetInverseIndex(parentCard.transform.parent.GetSiblingIndex(), length));
-    }
-
-    // Function to calculate the inverse index
-    int GetInverseIndex(int index, int length)
-    {
-        // Calculate the inverse index
-        int inverseIndex = length - index - 1;
-        return inverseIndex;
+        transform.SetSiblingIndex(parentCard.transform.parent.GetSiblingIndex());
     }
 
     void Update()
     {
         if (!initalize) return;
 
-        curveYOffset = positionCurve.Evaluate(parentCard.NormalizedPosition()) * positionCurveEffect;
-        curveRotationOffset = rotationCurve.Evaluate(parentCard.NormalizedPosition());
+        curveYOffset = curve.positioning.Evaluate(parentCard.NormalizedPosition()) * curve.positioningInfluence;
+        curveRotationOffset = curve.rotation.Evaluate(parentCard.NormalizedPosition());
 
         //Smooth Follow
         Vector3 verticalOffset = (Vector3.up * (parentCard.isDragging ? 0 : curveYOffset));
-        transform.position = Vector3.Lerp(transform.position, cardTransform.position + verticalOffset, followSpeed * Time.deltaTime);
+        transform.position = Vector3.Lerp(transform.position, cardTransform.position + verticalOffset, 30 * Time.deltaTime);
 
         //Smooth Rotate
         Vector3 movement = (transform.position - cardTransform.position);
@@ -112,7 +98,7 @@ public class CardVisual : MonoBehaviour
         Vector3 offset = transform.position - Camera.main.ScreenToWorldPoint(Input.mousePosition);
         float tiltX = parentCard.isHovering ? ((offset.y*-1) * manualTiltAmount) : 0;
         float tiltY = parentCard.isHovering ? ((offset.x) * manualTiltAmount) : 0;
-        float tiltZ = parentCard.isDragging ? tiltParent.eulerAngles.z : (curveRotationOffset * -rotationCurveEffect);
+        float tiltZ = parentCard.isDragging ? tiltParent.eulerAngles.z : (curveRotationOffset * (-curve.rotationInfluence * parentCard.SiblingAmount()));
 
         float lerpX = Mathf.LerpAngle(tiltParent.eulerAngles.x, tiltX + (sine* autoTiltAmount), tiltSpeed * Time.deltaTime);
         float lerpY = Mathf.LerpAngle(tiltParent.eulerAngles.y, tiltY + (cosine* autoTiltAmount), tiltSpeed * Time.deltaTime);

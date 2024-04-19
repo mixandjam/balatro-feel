@@ -350,11 +350,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   parentCard: {fileID: 0}
+  visualShadow: {fileID: 9157190824811683565}
   shakeParent: {fileID: 3449025543118524474}
   tiltParent: {fileID: 5862976466474931636}
-  visualShadow: {fileID: 9157190824811683565}
-  followSpeed: 30
-  rotationAmount: 90
+  followSpeed: 28
+  rotationAmount: 70
   rotationSpeed: 50
   autoTiltAmount: 15
   manualTiltAmount: 20
@@ -363,74 +363,7 @@ MonoBehaviour:
   scaleOnSelect: 1.25
   scaleTransition: 0.15
   scaleEase: 27
-  positionCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 6.961761
-      outSlope: 6.961761
-      tangentMode: 0
-      weightedMode: 2
-      inWeight: 0
-      outWeight: 0.20077813
-    - serializedVersion: 3
-      time: 0.5
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 136
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    - serializedVersion: 3
-      time: 1
-      value: 0
-      inSlope: -6.8714356
-      outSlope: -6.8714356
-      tangentMode: 0
-      weightedMode: 1
-      inWeight: 0.20233536
-      outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  positionCurveEffect: 0.1
-  rotationCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 1
-      inSlope: -2.3652868
-      outSlope: -2
-      tangentMode: 69
-      weightedMode: 2
-      inWeight: 0
-      outWeight: 0.6412451
-    - serializedVersion: 3
-      time: 0.5
-      value: 0
-      inSlope: -2
-      outSlope: -2
-      tangentMode: 69
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    - serializedVersion: 3
-      time: 1
-      value: -1
-      inSlope: -2
-      outSlope: 13.222984
-      tangentMode: 69
-      weightedMode: 1
-      inWeight: 0.102400064
-      outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  rotationCurveEffect: 5
+  curve: {fileID: 11400000, guid: d4dd399fb2dab44429d866dc2259bb4b, type: 2}
 --- !u!223 &4132845374223140069
 Canvas:
   m_ObjectHideFlags: 0

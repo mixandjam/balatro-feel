@@ -24,6 +24,7 @@ public class Card : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHand
     [HideInInspector] public UnityEvent<Card> DeselectEvent;
     [HideInInspector] public UnityEvent<Card> PointerEnterEvent;
     [HideInInspector] public UnityEvent<Card> PointerExitEvent;
+    [HideInInspector] public UnityEvent<Card> DestroyEvent;
 
     void Start()
     {
@@ -109,18 +110,29 @@ public class Card : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHand
         EventSystem.current.SetSelectedGameObject(null);
     }
 
+    public int SiblingAmount()
+    {
+        return transform.parent.CompareTag("Slot") ? transform.parent.parent.childCount : 0;
+    }
+
     public int ParentIndex()
     {
-        return transform.parent.GetSiblingIndex();
+        return transform.parent.CompareTag("Slot") ? transform.parent.GetSiblingIndex() : 0;
     }
 
     public float NormalizedPosition()
     {
-        return Remap((float)ParentIndex(), 0, (float)(transform.parent.parent.childCount-1), 0, 1);
+        return transform.parent.CompareTag("Slot") ? Remap((float)ParentIndex(), 0, (float)(transform.parent.parent.childCount-1), 0, 1) : 0;
     }
 
     public float Remap(float value, float from1, float to1, float from2, float to2)
     {
         return (value - from1) / (to1 - from1) * (to2 - from2) + from2;
     }
+
+    //private void OnDestroy()
+    //{
+    //    Destroy(cardVisual.gameObject);
+    //    DestroyEvent.Invoke(this);
+    //}
 }

@@ -12,9 +12,6 @@ public class HorizontalCardHolder : MonoBehaviour
     private Card[] cards;
     [SerializeField] private Card focusedCard;
 
-    public AnimationCurve handStyle;
-    public float handStyleAmount = .2f;
-
     bool isCrossing = false;
 
     void Start()
@@ -26,6 +23,7 @@ public class HorizontalCardHolder : MonoBehaviour
         {
             card.SelectEvent.AddListener(CardSelected);
             card.DeselectEvent.AddListener(CardDeselected);
+            card.DestroyEvent.AddListener(CardDeselected);
         }
 
         StartCoroutine(Frame());
@@ -47,7 +45,6 @@ public class HorizontalCardHolder : MonoBehaviour
 
     void CardDeselected(Card card)
     {
-        //focusedCard.transform.localPosition = Vector3.zero;
         focusedCard.transform.DOLocalMove(Vector3.zero, .15f).SetEase(Ease.OutBack);
 
         rect.sizeDelta += Vector2.right;
@@ -56,33 +53,47 @@ public class HorizontalCardHolder : MonoBehaviour
         focusedCard = null;
     }
 
+    void CardDestroyed(Card card)
+    {
+        cards = GetComponentsInChildren<Card>();
+
+        foreach (Card c in cards)
+        {
+            c.SelectEvent.AddListener(CardSelected);
+            c.DeselectEvent.AddListener(CardDeselected);
+            c.DestroyEvent.AddListener(CardDeselected);
+        }
+    }
+
     void Update()
     {
         if (focusedCard == null)
             return;
 
-        if (!isCrossing)
+        if (isCrossing)
+            return;
 
-            for (int i = 0; i < cards.Length; i++)
+        for (int i = 0; i < cards.Length; i++)
+        {
+
+            if (focusedCard.transform.position.x > cards[i].transform.position.x)
             {
-                if (focusedCard.transform.position.x > cards[i].transform.position.x)
+                if (focusedCard.ParentIndex() < cards[i].ParentIndex())
                 {
-                    if (focusedCard.ParentIndex() > cards[i].ParentIndex())
-                    {
-                        Swap(i);
-                        break;
-                    }
-                }
-
-                if (focusedCard.transform.position.x < cards[i].transform.position.x)
-                {
-                    if (focusedCard.ParentIndex() < cards[i].ParentIndex())
-                    {
-                        Swap(i);
-                        break;
-                    }
+                    Swap(i);
+                    break;
                 }
             }
+
+            if (focusedCard.transform.position.x < cards[i].transform.position.x)
+            {
+                if (focusedCard.ParentIndex() > cards[i].ParentIndex())
+                {
+                    Swap(i);
+                    break;
+                }
+            }
+        }
     }
 
     void Swap(int index)
