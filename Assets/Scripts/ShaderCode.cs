@@ -17,7 +17,17 @@ public class ShaderCode : MonoBehaviour
         image.material = m;
         visual = GetComponentInParent<CardVisual>();
 
-        //image.material.SetInt("_EDITION", 3);
+        string[] editions = new string[4];
+        editions[0] = "REGULAR";
+        editions[1] = "POLYCHROME";
+        editions[2] = "REGULAR";
+        editions[3] = "NEGATIVE";
+
+        for (int i = 0; i < image.material.enabledKeywords.Length; i++)
+        {
+            image.material.DisableKeyword(image.material.enabledKeywords[i]);
+        }
+        image.material.EnableKeyword("_EDITION_" + editions[Random.Range(0, editions.Length)]);
     }
 
     // Update is called once per frame
