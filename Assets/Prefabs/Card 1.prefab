@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 8562604021319485591}
   - component: {fileID: -3148967189081000219}
   m_Layer: 5
-  m_Name: Card
+  m_Name: Card 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -60,7 +60,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 72d103f73c46c407db068681e2811968, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cardVisualPrefab: {fileID: 7310339964073049012, guid: bddd0263814164da396aa8d1438dd810, type: 3}
+  cardVisualPrefab: {fileID: 7310339964073049012, guid: 86f78c0ddc32446a4bc8992d05724639, type: 3}
   cardVisual: {fileID: 0}
   isHovering: 0
   isDragging: 0
@@ -74,9 +74,6 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   PointerExitEvent:
-    m_PersistentCalls:
-      m_Calls: []
-  DestroyEvent:
     m_PersistentCalls:
       m_Calls: []
 --- !u!114 &7486306067316991545

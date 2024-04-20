@@ -303,7 +303,7 @@ GameObject:
   - component: {fileID: 7994647478966201829}
   - component: {fileID: 4132845374223140069}
   m_Layer: 5
-  m_Name: CardVisual
+  m_Name: CardVisual 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -357,14 +357,14 @@ MonoBehaviour:
   followSpeed: 28
   rotationAmount: 70
   rotationSpeed: 50
-  autoTiltAmount: 15
+  autoTiltAmount: 5
   manualTiltAmount: 20
   tiltSpeed: 40
   scaleOnHover: 1.15
   scaleOnSelect: 1.25
   scaleTransition: 0.15
   scaleEase: 27
-  curve: {fileID: 11400000, guid: d4dd399fb2dab44429d866dc2259bb4b, type: 2}
+  curve: {fileID: 11400000, guid: 41cbd8028de364b88bbdecc05de1c91a, type: 2}
 --- !u!223 &4132845374223140069
 Canvas:
   m_ObjectHideFlags: 0

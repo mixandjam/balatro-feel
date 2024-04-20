@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 17aff2507ba344f8f80d8d38df784c1c, type: 3}
-  m_Name: CurveParameters
+  m_Name: CurveParameters 1
   m_EditorClassIdentifier: 
   positioning:
     serializedVersion: 2
@@ -18,29 +18,20 @@ MonoBehaviour:
     - serializedVersion: 3
       time: 0
       value: 0
-      inSlope: 6.961761
-      outSlope: 6.961761
-      tangentMode: 0
-      weightedMode: 2
-      inWeight: 0
-      outWeight: 0.20077813
-    - serializedVersion: 3
-      time: 0.5
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 136
+      inSlope: 1
+      outSlope: 1
+      tangentMode: 34
       weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
+      inWeight: 0
+      outWeight: 0
     - serializedVersion: 3
       time: 1
-      value: 0
-      inSlope: -6.8714356
-      outSlope: -6.8714356
-      tangentMode: 0
-      weightedMode: 1
-      inWeight: 0.20233536
+      value: 1
+      inSlope: 1
+      outSlope: 1
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
       outWeight: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
@@ -79,4 +70,4 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  rotationInfluence: 1.25
+  rotationInfluence: 0

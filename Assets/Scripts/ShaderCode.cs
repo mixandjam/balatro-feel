@@ -16,6 +16,8 @@ public class ShaderCode : MonoBehaviour
         m = new Material(image.material);
         image.material = m;
         visual = GetComponentInParent<CardVisual>();
+
+        //image.material.SetInt("_EDITION", 3);
     }
 
     // Update is called once per frame

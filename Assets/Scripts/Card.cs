@@ -24,7 +24,6 @@ public class Card : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHand
     [HideInInspector] public UnityEvent<Card> DeselectEvent;
     [HideInInspector] public UnityEvent<Card> PointerEnterEvent;
     [HideInInspector] public UnityEvent<Card> PointerExitEvent;
-    [HideInInspector] public UnityEvent<Card> DestroyEvent;
 
     void Start()
     {
@@ -54,7 +53,7 @@ public class Card : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHand
         Vector3 clampedPosition = transform.position;
         clampedPosition.x = Mathf.Clamp(clampedPosition.x, -screenBounds.x, screenBounds.x);
         clampedPosition.y = Mathf.Clamp(clampedPosition.y, -screenBounds.y, screenBounds.y);
-        transform.position = clampedPosition;
+        transform.position = new Vector3(clampedPosition.x,clampedPosition.y,0);
     }
 
     public void OnBeginDrag(PointerEventData eventData)
@@ -112,7 +111,7 @@ public class Card : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHand
 
     public int SiblingAmount()
     {
-        return transform.parent.CompareTag("Slot") ? transform.parent.parent.childCount : 0;
+        return transform.parent.CompareTag("Slot") ? transform.parent.parent.childCount - 1 : 0;
     }
 
     public int ParentIndex()
@@ -130,9 +129,8 @@ public class Card : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHand
         return (value - from1) / (to1 - from1) * (to2 - from2) + from2;
     }
 
-    //private void OnDestroy()
-    //{
-    //    Destroy(cardVisual.gameObject);
-    //    DestroyEvent.Invoke(this);
-    //}
+    private void OnDestroy()
+    {
+        Destroy(cardVisual.gameObject);
+    }
 }

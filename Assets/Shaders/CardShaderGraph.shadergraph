@@ -936,7 +936,7 @@
     "overrideHLSLDeclaration": false,
     "hlslDeclarationOverride": 0,
     "m_Hidden": false,
-    "m_Value": 0.15000000596046449,
+    "m_Value": 0.20000000298023225,
     "m_FloatType": 0,
     "m_RangeValues": {
         "x": 0.0,
@@ -1018,7 +1018,7 @@
     "m_Hidden": false,
     "m_ShaderOutputName": "_Birghtness",
     "m_StageCapability": 2,
-    "m_Value": 0.699999988079071,
+    "m_Value": 0.75,
     "m_DefaultValue": 0.0,
     "m_Labels": []
 }
@@ -1539,10 +1539,10 @@
         "m_Expanded": true,
         "m_Position": {
             "serializedVersion": "2",
-            "x": -580.0,
-            "y": -373.5000305175781,
+            "x": -566.5,
+            "y": -373.5,
             "width": 208.0,
-            "height": 325.9999694824219
+            "height": 350.0
         }
     },
     "m_Slots": [
@@ -1962,7 +1962,7 @@
             "referenceName": "NEGATIVE"
         }
     ],
-    "m_Value": 1,
+    "m_Value": 0,
     "m_IsEditable": true
 }
 
