@@ -61,18 +61,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   selected: 0
-  selectionOffset: 50
+  selectionOffset: 25
   cardVisualPrefab: {fileID: 7310339964073049012, guid: bddd0263814164da396aa8d1438dd810, type: 3}
   cardVisual: {fileID: 0}
   isHovering: 0
   isDragging: 0
   wasDragged: 0
-  SelectEvent:
-    m_PersistentCalls:
-      m_Calls: []
-  DeselectEvent:
-    m_PersistentCalls:
-      m_Calls: []
   PointerEnterEvent:
     m_PersistentCalls:
       m_Calls: []
@@ -89,6 +83,9 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   EndDragEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  SelectEvent:
     m_PersistentCalls:
       m_Calls: []
 --- !u!114 &7486306067316991545

@@ -59,14 +59,13 @@ public class CardVisual : MonoBehaviour
         cardTransform = target.transform;
 
         //Event Listening
-        parentCard.SelectEvent.AddListener(Select);
-        parentCard.DeselectEvent.AddListener(Deselect);
         parentCard.PointerEnterEvent.AddListener(PointerEnter);
         parentCard.PointerExitEvent.AddListener(PointerExit);
         parentCard.BeginDragEvent.AddListener(BeginDrag);
         parentCard.EndDragEvent.AddListener(EndDrag);
         parentCard.PointerDownEvent.AddListener(PointerDown);
         parentCard.PointerUpEvent.AddListener(PointerUp);
+        parentCard.SelectEvent.AddListener(Select);
 
         //Initialization
         initalize = true;
@@ -120,8 +119,14 @@ public class CardVisual : MonoBehaviour
         return (value - from1) / (to1 - from1) * (to2 - from2) + from2;
     }
 
-    private void Select(Card card)
+    private void Select(Card card, bool state)
     {
+        DOTween.Kill(2, true);
+        float dir = state ? 1 : 0;
+        shakeParent.DOPunchPosition(shakeParent.up * 20 * dir, scaleTransition, 10, 1);
+        shakeParent.DOPunchRotation(Vector3.forward * 2.5f, .15f, 20, 1).SetId(2);
+        transform.DOScale(scaleOnHover, scaleTransition).SetEase(scaleEase);
+
 
     }
 
@@ -144,11 +149,6 @@ public class CardVisual : MonoBehaviour
         transform.DOScale(1, scaleTransition).SetEase(scaleEase);
     }
 
-    private void Deselect(Card card)
-    {
-        //transform.DOScale(1, scaleTransition*2).SetEase(scaleEase);
-
-    }
     private void PointerEnter(Card card)
     {
         transform.DOScale(scaleOnHover, scaleTransition).SetEase(scaleEase);
@@ -166,7 +166,7 @@ public class CardVisual : MonoBehaviour
         //if (pressCoroutine != null)
         //    StopCoroutine(pressCoroutine);
 
-        transform.DOScale(longPress ? 1 : scaleOnSelect, scaleTransition).SetEase(scaleEase);
+        transform.DOScale(longPress ? scaleOnHover : scaleOnSelect, scaleTransition).SetEase(scaleEase);
         GetComponent<Canvas>().overrideSorting = false;
 
         visualShadow.localPosition = shadowDistance;

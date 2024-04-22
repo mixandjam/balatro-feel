@@ -355,7 +355,7 @@ MonoBehaviour:
   tiltParent: {fileID: 5862976466474931636}
   cardImage: {fileID: 7697484841366769644}
   followSpeed: 28
-  rotationAmount: 70
+  rotationAmount: 85
   rotationSpeed: 50
   autoTiltAmount: 5
   manualTiltAmount: 20

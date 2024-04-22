@@ -35,8 +35,6 @@ public class HorizontalCardHolder : MonoBehaviour
 
         foreach (Card card in cards)
         {
-            card.SelectEvent.AddListener(CardSelected);
-            card.DeselectEvent.AddListener(CardDeselected);
             card.PointerEnterEvent.AddListener(CardPointerEnter);
             card.PointerExitEvent.AddListener(CardPointerExit);
             card.BeginDragEvent.AddListener(BeginDrag);
@@ -56,18 +54,6 @@ public class HorizontalCardHolder : MonoBehaviour
             }
         }
     }
-
-    void CardSelected(Card card)
-    {
-        //selectedCard = card;
-    }
-
-    void CardDeselected(Card card)
-    {
-        rect.sizeDelta += Vector2.right;
-        rect.sizeDelta -= Vector2.right;
-    }
-
 
     private void BeginDrag(Card card)
     {

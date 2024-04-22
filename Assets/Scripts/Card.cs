@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Collections;
 using UnityEngine.UI;
 
-public class Card : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHandler, ISelectHandler, IDeselectHandler, IPointerEnterHandler, IPointerExitHandler, IPointerUpHandler, IPointerDownHandler
+public class Card : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHandler, IPointerEnterHandler, IPointerExitHandler, IPointerUpHandler, IPointerDownHandler
 {
     private Canvas canvas;
     private Image imageComponent;
@@ -29,14 +29,13 @@ public class Card : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHand
     [HideInInspector] public bool wasDragged;
 
     [Header("Events")]
-    [HideInInspector] public UnityEvent<Card> SelectEvent;
-    [HideInInspector] public UnityEvent<Card> DeselectEvent;
     [HideInInspector] public UnityEvent<Card> PointerEnterEvent;
     [HideInInspector] public UnityEvent<Card> PointerExitEvent;
     [HideInInspector] public UnityEvent<Card, bool> PointerUpEvent;
     [HideInInspector] public UnityEvent<Card> PointerDownEvent;
     [HideInInspector] public UnityEvent<Card> BeginDragEvent;
     [HideInInspector] public UnityEvent<Card> EndDragEvent;
+    [HideInInspector] public UnityEvent<Card, bool> SelectEvent;
 
     void Start()
     {
@@ -66,7 +65,7 @@ public class Card : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHand
         Vector3 clampedPosition = transform.position;
         clampedPosition.x = Mathf.Clamp(clampedPosition.x, -screenBounds.x, screenBounds.x);
         clampedPosition.y = Mathf.Clamp(clampedPosition.y, -screenBounds.y, screenBounds.y);
-        transform.position = new Vector3(clampedPosition.x,clampedPosition.y,0);
+        transform.position = new Vector3(clampedPosition.x, clampedPosition.y, 0);
     }
 
     public void OnBeginDrag(PointerEventData eventData)
@@ -99,16 +98,6 @@ public class Card : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHand
             yield return new WaitForEndOfFrame();
             wasDragged = false;
         }
-    }
-
-    public void OnSelect(BaseEventData eventData)
-    {
-        SelectEvent.Invoke(this);
-    }
-
-    public void OnDeselect(BaseEventData eventData)
-    {
-        DeselectEvent.Invoke(this);
     }
 
     public void OnPointerEnter(PointerEventData eventData)
@@ -148,10 +137,11 @@ public class Card : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHand
         if (wasDragged)
             return;
 
-            selected = !selected;
+        selected = !selected;
+        SelectEvent.Invoke(this, selected);
 
         if (selected)
-            transform.localPosition += (cardVisual.transform.up * 50);
+            transform.localPosition += (cardVisual.transform.up * selectionOffset);
         else
             transform.localPosition = Vector3.zero;
     }
@@ -181,7 +171,7 @@ public class Card : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHand
 
     public float NormalizedPosition()
     {
-        return transform.parent.CompareTag("Slot") ? Remap((float)ParentIndex(), 0, (float)(transform.parent.parent.childCount-1), 0, 1) : 0;
+        return transform.parent.CompareTag("Slot") ? Remap((float)ParentIndex(), 0, (float)(transform.parent.parent.childCount - 1), 0, 1) : 0;
     }
 
     public float Remap(float value, float from1, float to1, float from2, float to2)
