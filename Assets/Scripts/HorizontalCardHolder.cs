@@ -39,6 +39,8 @@ public class HorizontalCardHolder : MonoBehaviour
             card.DeselectEvent.AddListener(CardDeselected);
             card.PointerEnterEvent.AddListener(CardPointerEnter);
             card.PointerExitEvent.AddListener(CardPointerExit);
+            card.BeginDragEvent.AddListener(BeginDrag);
+            card.EndDragEvent.AddListener(EndDrag);
             card.name = cardCount.ToString();
             cardCount++;
         }
@@ -57,17 +59,34 @@ public class HorizontalCardHolder : MonoBehaviour
 
     void CardSelected(Card card)
     {
-        selectedCard = card;
+        //selectedCard = card;
     }
 
     void CardDeselected(Card card)
     {
-        selectedCard.transform.DOLocalMove(Vector3.zero, .15f).SetEase(Ease.OutBack);
+        rect.sizeDelta += Vector2.right;
+        rect.sizeDelta -= Vector2.right;
+    }
+
+
+    private void BeginDrag(Card card)
+    {
+        selectedCard = card;
+    }
+
+
+    void EndDrag(Card card)
+    {
+        if (selectedCard == null)
+            return;
+
+        selectedCard.transform.DOLocalMove(selectedCard.selected ? new Vector3(0,selectedCard.selectionOffset,0) : Vector3.zero, .15f).SetEase(Ease.OutBack);
 
         rect.sizeDelta += Vector2.right;
         rect.sizeDelta -= Vector2.right;
 
         selectedCard = null;
+
     }
 
     void CardPointerEnter(Card card)
@@ -89,6 +108,14 @@ public class HorizontalCardHolder : MonoBehaviour
                 Destroy(hoveredCard.transform.parent.gameObject);
                 cards.Remove(hoveredCard);
 
+            }
+        }
+
+        if (Input.GetMouseButtonDown(1))
+        {
+            foreach (Card card in cards)
+            {
+                card.Deselect();
             }
         }
 
@@ -129,7 +156,7 @@ public class HorizontalCardHolder : MonoBehaviour
         Transform crossedParent = cards[index].transform.parent;
 
         cards[index].transform.SetParent(focusedParent);
-        cards[index].transform.localPosition = Vector3.zero;
+        cards[index].transform.localPosition = cards[index].selected ? new Vector3(0, cards[index].selectionOffset, 0) : Vector3.zero;
         selectedCard.transform.SetParent(crossedParent);
 
         isCrossing = false;

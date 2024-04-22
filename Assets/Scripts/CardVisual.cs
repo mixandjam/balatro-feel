@@ -20,7 +20,7 @@ public class CardVisual : MonoBehaviour
     [Header("References")]
     public Transform visualShadow;
     private Vector2 shadowDistance;
-    [SerializeField]  private Transform shakeParent;
+    [SerializeField] private Transform shakeParent;
     [SerializeField] private Transform tiltParent;
     [SerializeField] private Image cardImage;
 
@@ -45,13 +45,14 @@ public class CardVisual : MonoBehaviour
 
     private float curveYOffset;
     private float curveRotationOffset;
+    private Coroutine pressCoroutine;
 
     private void Start()
     {
         shadowDistance = visualShadow.localPosition;
     }
 
-    public void Initialize(Card target, int index=0)
+    public void Initialize(Card target, int index = 0)
     {
         //Declarations
         parentCard = target;
@@ -62,18 +63,15 @@ public class CardVisual : MonoBehaviour
         parentCard.DeselectEvent.AddListener(Deselect);
         parentCard.PointerEnterEvent.AddListener(PointerEnter);
         parentCard.PointerExitEvent.AddListener(PointerExit);
+        parentCard.BeginDragEvent.AddListener(BeginDrag);
+        parentCard.EndDragEvent.AddListener(EndDrag);
+        parentCard.PointerDownEvent.AddListener(PointerDown);
+        parentCard.PointerUpEvent.AddListener(PointerUp);
 
         //Initialization
         initalize = true;
-
-        //string[] editions = new string[3];
-        //editions[0] = "normal";
-        //editions[1] = "polychrome";
-        //editions[2] = "negative";
-
-        //cardImage.material.set
-
     }
+
 
     public void UpdateIndex(int length)
     {
@@ -94,10 +92,10 @@ public class CardVisual : MonoBehaviour
 
         //Smooth Rotate
         Vector3 movement = (transform.position - cardTransform.position);
-        movementDelta = Vector3.Lerp(movementDelta,movement,25*Time.deltaTime);
+        movementDelta = Vector3.Lerp(movementDelta, movement, 25 * Time.deltaTime);
         Vector3 movementRotation = (parentCard.isDragging ? movementDelta : movement) * rotationAmount;
         rotationDelta = Vector3.Lerp(rotationDelta, movementRotation, rotationSpeed * Time.deltaTime);
-        transform.eulerAngles = new Vector3(transform.eulerAngles.x, transform.eulerAngles.y, Mathf.Clamp(rotationDelta.x,-60,60));
+        transform.eulerAngles = new Vector3(transform.eulerAngles.x, transform.eulerAngles.y, Mathf.Clamp(rotationDelta.x, -60, 60));
 
         //Tilt Logic
         savedIndex = parentCard.isDragging ? savedIndex : parentCard.ParentIndex();
@@ -105,13 +103,13 @@ public class CardVisual : MonoBehaviour
         float cosine = Mathf.Cos(Time.time + savedIndex) * (parentCard.isHovering ? .2f : 1);
 
         Vector3 offset = transform.position - Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        float tiltX = parentCard.isHovering ? ((offset.y*-1) * manualTiltAmount) : 0;
+        float tiltX = parentCard.isHovering ? ((offset.y * -1) * manualTiltAmount) : 0;
         float tiltY = parentCard.isHovering ? ((offset.x) * manualTiltAmount) : 0;
         float tiltZ = parentCard.isDragging ? tiltParent.eulerAngles.z : (curveRotationOffset * (curve.rotationInfluence * parentCard.SiblingAmount()));
 
-        float lerpX = Mathf.LerpAngle(tiltParent.eulerAngles.x, tiltX + (sine* autoTiltAmount), tiltSpeed * Time.deltaTime);
-        float lerpY = Mathf.LerpAngle(tiltParent.eulerAngles.y, tiltY + (cosine* autoTiltAmount), tiltSpeed * Time.deltaTime);
-        float lerpZ = Mathf.LerpAngle(tiltParent.eulerAngles.z,tiltZ, tiltSpeed/2 * Time.deltaTime);
+        float lerpX = Mathf.LerpAngle(tiltParent.eulerAngles.x, tiltX + (sine * autoTiltAmount), tiltSpeed * Time.deltaTime);
+        float lerpY = Mathf.LerpAngle(tiltParent.eulerAngles.y, tiltY + (cosine * autoTiltAmount), tiltSpeed * Time.deltaTime);
+        float lerpZ = Mathf.LerpAngle(tiltParent.eulerAngles.z, tiltZ, tiltSpeed / 2 * Time.deltaTime);
 
         tiltParent.eulerAngles = new Vector3(lerpX, lerpY, lerpZ);
 
@@ -124,20 +122,31 @@ public class CardVisual : MonoBehaviour
 
     private void Select(Card card)
     {
-        GetComponent<Canvas>().overrideSorting = true;
-        transform.DOScale(scaleOnSelect, scaleTransition).SetEase(scaleEase);
 
-        visualShadow.localPosition += (-Vector3.up * 20);
-        visualShadow.GetComponent<Canvas>().overrideSorting = false;
+    }
+
+    private void BeginDrag(Card card)
+    {
+        transform.DOScale(scaleOnSelect, scaleTransition).SetEase(scaleEase);
+        GetComponent<Canvas>().overrideSorting = true;
+
+        //visualShadow.localPosition += (-Vector3.up * 20);
+        //visualShadow.GetComponent<Canvas>().overrideSorting = false;
+    }
+
+    private void EndDrag(Card card)
+    {
+        GetComponent<Canvas>().overrideSorting = false;
+
+        //visualShadow.localPosition = shadowDistance;
+        //visualShadow.GetComponent<Canvas>().overrideSorting = true;
+
+        transform.DOScale(1, scaleTransition).SetEase(scaleEase);
     }
 
     private void Deselect(Card card)
     {
-        GetComponent<Canvas>().overrideSorting = false;
-        transform.DOScale(1, scaleTransition*2).SetEase(scaleEase);
-
-        visualShadow.localPosition = shadowDistance;
-        visualShadow.GetComponent<Canvas>().overrideSorting = true;
+        //transform.DOScale(1, scaleTransition*2).SetEase(scaleEase);
 
     }
     private void PointerEnter(Card card)
@@ -148,7 +157,36 @@ public class CardVisual : MonoBehaviour
     }
     private void PointerExit(Card card)
     {
-        if(EventSystem.current.currentSelectedGameObject != parentCard.gameObject)
-        transform.DOScale(1, scaleTransition).SetEase(scaleEase);
+        if (!parentCard.wasDragged)
+            transform.DOScale(1, scaleTransition).SetEase(scaleEase);
     }
+
+    private void PointerUp(Card card, bool longPress)
+    {
+        //if (pressCoroutine != null)
+        //    StopCoroutine(pressCoroutine);
+
+        transform.DOScale(longPress ? 1 : scaleOnSelect, scaleTransition).SetEase(scaleEase);
+        GetComponent<Canvas>().overrideSorting = false;
+
+        visualShadow.localPosition = shadowDistance;
+        visualShadow.GetComponent<Canvas>().overrideSorting = true;
+    }
+
+    private void PointerDown(Card card)
+    {
+        transform.DOScale(scaleOnSelect, scaleTransition).SetEase(scaleEase);
+
+        //if (pressCoroutine != null)
+        //    StopCoroutine(pressCoroutine);
+
+        //pressCoroutine = StartCoroutine(PressCooldown());
+
+        //IEnumerator PressCooldown()
+
+        visualShadow.localPosition += (-Vector3.up * 20);
+        visualShadow.GetComponent<Canvas>().overrideSorting = false;
+    }
+
+
 }

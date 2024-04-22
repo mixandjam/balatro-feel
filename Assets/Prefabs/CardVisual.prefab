@@ -302,6 +302,7 @@ GameObject:
   - component: {fileID: 7120376734261528799}
   - component: {fileID: 7994647478966201829}
   - component: {fileID: 4132845374223140069}
+  - component: {fileID: 404130344431792101}
   m_Layer: 5
   m_Name: CardVisual
   m_TagString: Untagged
@@ -358,10 +359,10 @@ MonoBehaviour:
   rotationAmount: 70
   rotationSpeed: 50
   autoTiltAmount: 15
-  manualTiltAmount: 20
+  manualTiltAmount: 30
   tiltSpeed: 40
-  scaleOnHover: 1.15
-  scaleOnSelect: 1.25
+  scaleOnHover: 1.07
+  scaleOnSelect: 1.2
   scaleTransition: 0.15
   scaleEase: 27
   curve: {fileID: 11400000, guid: d4dd399fb2dab44429d866dc2259bb4b, type: 2}
@@ -388,3 +389,15 @@ Canvas:
   m_SortingLayerID: 0
   m_SortingOrder: 1
   m_TargetDisplay: 0
+--- !u!225 &404130344431792101
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7310339964073049012}
+  m_Enabled: 0
+  m_Alpha: 0
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0

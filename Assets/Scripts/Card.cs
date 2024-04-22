@@ -2,14 +2,22 @@
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
+using System.Collections.Generic;
+using System.Collections;
 using UnityEngine.UI;
 
-public class Card : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHandler, ISelectHandler, IDeselectHandler, IPointerEnterHandler, IPointerExitHandler, IPointerUpHandler
+public class Card : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHandler, ISelectHandler, IDeselectHandler, IPointerEnterHandler, IPointerExitHandler, IPointerUpHandler, IPointerDownHandler
 {
     private Canvas canvas;
     private Image imageComponent;
     private VisualCardsHandler? visualHandler;
     private Vector3 offset;
+
+    [Header("Selection")]
+    public bool selected;
+    public float selectionOffset = 50;
+    private float pointerDownTime;
+    private float pointerUpTime;
 
     [Header("Visual")]
     [SerializeField] private GameObject cardVisualPrefab;
@@ -18,12 +26,17 @@ public class Card : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHand
     [Header("States")]
     public bool isHovering;
     public bool isDragging;
+    [HideInInspector] public bool wasDragged;
 
     [Header("Events")]
     [HideInInspector] public UnityEvent<Card> SelectEvent;
     [HideInInspector] public UnityEvent<Card> DeselectEvent;
     [HideInInspector] public UnityEvent<Card> PointerEnterEvent;
     [HideInInspector] public UnityEvent<Card> PointerExitEvent;
+    [HideInInspector] public UnityEvent<Card, bool> PointerUpEvent;
+    [HideInInspector] public UnityEvent<Card> PointerDownEvent;
+    [HideInInspector] public UnityEvent<Card> BeginDragEvent;
+    [HideInInspector] public UnityEvent<Card> EndDragEvent;
 
     void Start()
     {
@@ -58,9 +71,14 @@ public class Card : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHand
 
     public void OnBeginDrag(PointerEventData eventData)
     {
+        BeginDragEvent.Invoke(this);
         Vector2 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         offset = mousePosition - (Vector2)transform.position;
         isDragging = true;
+        canvas.GetComponent<GraphicRaycaster>().enabled = false;
+        imageComponent.raycastTarget = false;
+
+        wasDragged = true;
     }
 
     public void OnDrag(PointerEventData eventData)
@@ -69,22 +87,28 @@ public class Card : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHand
 
     public void OnEndDrag(PointerEventData eventData)
     {
+        EndDragEvent.Invoke(this);
         isDragging = false;
+        canvas.GetComponent<GraphicRaycaster>().enabled = true;
+        imageComponent.raycastTarget = true;
+
+        StartCoroutine(FrameWait());
+
+        IEnumerator FrameWait()
+        {
+            yield return new WaitForEndOfFrame();
+            wasDragged = false;
+        }
     }
 
     public void OnSelect(BaseEventData eventData)
     {
         SelectEvent.Invoke(this);
-        imageComponent.raycastTarget = false;
-        canvas.GetComponent<GraphicRaycaster>().enabled = false;
     }
 
     public void OnDeselect(BaseEventData eventData)
     {
         DeselectEvent.Invoke(this);
-        imageComponent.raycastTarget = true;
-        canvas.GetComponent<GraphicRaycaster>().enabled = true;
-
     }
 
     public void OnPointerEnter(PointerEventData eventData)
@@ -99,15 +123,51 @@ public class Card : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHand
         isHovering = false;
     }
 
-    public void OnPointerUp(PointerEventData eventData)
+
+    public void OnPointerDown(PointerEventData eventData)
     {
-        Release();
+        if (eventData.button != PointerEventData.InputButton.Left)
+            return;
+
+        PointerDownEvent.Invoke(this);
+        pointerDownTime = Time.time;
     }
 
-    void Release()
+    public void OnPointerUp(PointerEventData eventData)
     {
-        EventSystem.current.SetSelectedGameObject(null);
+        if (eventData.button != PointerEventData.InputButton.Left)
+            return;
+
+        pointerUpTime = Time.time;
+
+        PointerUpEvent.Invoke(this, pointerUpTime - pointerDownTime > .2f);
+
+        if (pointerUpTime - pointerDownTime > .2f)
+            return;
+
+        if (wasDragged)
+            return;
+
+            selected = !selected;
+
+        if (selected)
+            transform.localPosition += (cardVisual.transform.up * 50);
+        else
+            transform.localPosition = Vector3.zero;
     }
+
+    public void Deselect()
+    {
+        if (selected)
+        {
+            selected = false;
+            if (selected)
+                transform.localPosition += (cardVisual.transform.up * 50);
+            else
+                transform.localPosition = Vector3.zero;
+        }
+    }
+
 
     public int SiblingAmount()
     {

@@ -49,7 +49,7 @@ Material:
     - _DisplacementIntensity: 0
     - _EDITION: 1
     - _Frequency: 1
-    - _Power: 0.3
+    - _Power: 0.35
     - _QueueControl: 0
     - _QueueOffset: 0
     - _frequency: 1
