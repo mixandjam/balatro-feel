@@ -20,7 +20,7 @@ public class ShaderCode : MonoBehaviour
         string[] editions = new string[4];
         editions[0] = "REGULAR";
         editions[1] = "POLYCHROME";
-        editions[2] = "REGULAR";
+        editions[2] = "REGULAR  ";
         editions[3] = "NEGATIVE";
 
         for (int i = 0; i < image.material.enabledKeywords.Length; i++)
