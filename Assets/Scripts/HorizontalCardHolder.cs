@@ -47,7 +47,7 @@ public class HorizontalCardHolder : MonoBehaviour
 
         IEnumerator Frame()
         {
-            yield return new WaitForEndOfFrame();
+            yield return new WaitForSecondsRealtime(.1f);
             for (int i = 0; i < cards.Count; i++)
             {
                 cards[i].cardVisual.UpdateIndex(transform.childCount);
