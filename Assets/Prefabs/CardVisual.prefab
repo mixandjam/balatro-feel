@@ -355,7 +355,7 @@ MonoBehaviour:
   shakeParent: {fileID: 3449025543118524474}
   tiltParent: {fileID: 5862976466474931636}
   cardImage: {fileID: 7697484841366769644}
-  followSpeed: 28
+  followSpeed: 25
   rotationAmount: 70
   rotationSpeed: 50
   autoTiltAmount: 15
@@ -365,6 +365,12 @@ MonoBehaviour:
   scaleOnSelect: 1.2
   scaleTransition: 0.15
   scaleEase: 27
+  selectPunchAmount: 20
+  hoverPunchAngle: 5
+  hoverTransition: 0.15
+  swapRotationAngle: 20
+  swapTransition: 0.2
+  swapVibrato: 5
   curve: {fileID: 11400000, guid: d4dd399fb2dab44429d866dc2259bb4b, type: 2}
 --- !u!223 &4132845374223140069
 Canvas:

@@ -10,7 +10,7 @@ public class Card : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHand
 {
     private Canvas canvas;
     private Image imageComponent;
-    private VisualCardsHandler? visualHandler;
+    private VisualCardsHandler visualHandler;
     private Vector3 offset;
 
     [Header("Selection")]
@@ -171,12 +171,7 @@ public class Card : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHand
 
     public float NormalizedPosition()
     {
-        return transform.parent.CompareTag("Slot") ? Remap((float)ParentIndex(), 0, (float)(transform.parent.parent.childCount - 1), 0, 1) : 0;
-    }
-
-    public float Remap(float value, float from1, float to1, float from2, float to2)
-    {
-        return (value - from1) / (to1 - from1) * (to2 - from2) + from2;
+        return transform.parent.CompareTag("Slot") ? ExtensionMethods.Remap((float)ParentIndex(), 0, (float)(transform.parent.parent.childCount - 1), 0, 1) : 0;
     }
 
     private void OnDestroy()

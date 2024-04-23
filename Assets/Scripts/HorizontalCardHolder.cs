@@ -147,6 +147,9 @@ public class HorizontalCardHolder : MonoBehaviour
 
         isCrossing = false;
 
+        bool swapIsRight = cards[index].ParentIndex() > selectedCard.ParentIndex();
+        cards[index].cardVisual.Swap(swapIsRight ? -1 : 1);
+
         //Updated Visual Indexes
         foreach (Card card in cards)
         {

@@ -20,7 +20,7 @@ public class ShaderCode : MonoBehaviour
         string[] editions = new string[4];
         editions[0] = "REGULAR";
         editions[1] = "POLYCHROME";
-        editions[2] = "REGULAR  ";
+        editions[2] = "REGULAR";
         editions[3] = "NEGATIVE";
 
         for (int i = 0; i < image.material.enabledKeywords.Length; i++)
@@ -49,7 +49,7 @@ public class ShaderCode : MonoBehaviour
         yAngle = ClampAngle(yAngle, -90f, 90);
 
 
-        m.SetVector("_Rotation", new Vector2(Remap(xAngle,-20,20,-.5f,.5f), Remap(yAngle, -20, 20, -.5f, .5f)));
+        m.SetVector("_Rotation", new Vector2(ExtensionMethods.Remap(xAngle,-20,20,-.5f,.5f), ExtensionMethods.Remap(yAngle, -20, 20, -.5f, .5f)));
 
     }
 
@@ -62,11 +62,4 @@ public class ShaderCode : MonoBehaviour
             angle -= 360f;
         return Mathf.Clamp(angle, min, max);
     }
-
-
-    public float Remap(float value, float from1, float to1, float from2, float to2)
-    {
-        return (value - from1) / (to1 - from1) * (to2 - from2) + from2;
-    }
-
 }
