@@ -111,7 +111,7 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2017949772597159594}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0.58955234, w: -0.8077302}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -269,7 +269,7 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5434269512320548843}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0.0036862856, y: 0.029631522, z: -0.58892995, w: -0.8076324}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -361,6 +361,7 @@ MonoBehaviour:
   autoTiltAmount: 15
   manualTiltAmount: 30
   tiltSpeed: 40
+  scaleAnimations: 1
   scaleOnHover: 1.07
   scaleOnSelect: 1.2
   scaleTransition: 0.15
@@ -368,6 +369,7 @@ MonoBehaviour:
   selectPunchAmount: 20
   hoverPunchAngle: 5
   hoverTransition: 0.15
+  swapAnimations: 1
   swapRotationAngle: 20
   swapTransition: 0.2
   swapVibrato: 5

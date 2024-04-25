@@ -10,6 +10,7 @@ public class Card : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHand
 {
     private Canvas canvas;
     private Image imageComponent;
+    [SerializeField] private bool instantiateVisual = true;
     private VisualCardsHandler visualHandler;
     private Vector3 offset;
 
@@ -44,6 +45,10 @@ public class Card : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHand
     {
         canvas = GetComponentInParent<Canvas>();
         imageComponent = GetComponent<Image>();
+
+        if (!instantiateVisual)
+            return;
+
         visualHandler = FindObjectOfType<VisualCardsHandler>();
         cardVisual = Instantiate(cardVisualPrefab, visualHandler ? visualHandler.transform : canvas.transform).GetComponent<CardVisual>();
         cardVisual.Initialize(this);
@@ -179,6 +184,7 @@ public class Card : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHand
 
     private void OnDestroy()
     {
+        if(cardVisual != null)
         Destroy(cardVisual.gameObject);
     }
 }

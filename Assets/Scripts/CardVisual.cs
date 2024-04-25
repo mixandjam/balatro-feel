@@ -39,6 +39,7 @@ public class CardVisual : MonoBehaviour
     [SerializeField] private float tiltSpeed = 20;
 
     [Header("Scale Parameters")]
+    [SerializeField] private bool scaleAnimations = true;
     [SerializeField] private float scaleOnHover = 1.15f;
     [SerializeField] private float scaleOnSelect = 1.25f;
     [SerializeField] private float scaleTransition = .15f;
@@ -52,6 +53,7 @@ public class CardVisual : MonoBehaviour
     [SerializeField] private float hoverTransition = .15f;
 
     [Header("Swap Parameters")]
+    [SerializeField] private bool swapAnimations = true;
     [SerializeField] private float swapRotationAngle = 30;
     [SerializeField] private float swapTransition = .15f;
     [SerializeField] private int swapVibrato = 5;
@@ -151,19 +153,26 @@ public class CardVisual : MonoBehaviour
         float dir = state ? 1 : 0;
         shakeParent.DOPunchPosition(shakeParent.up * selectPunchAmount * dir, scaleTransition, 10, 1);
         shakeParent.DOPunchRotation(Vector3.forward * (hoverPunchAngle/2), hoverTransition, 20, 1).SetId(2);
-        transform.DOScale(scaleOnHover, scaleTransition).SetEase(scaleEase);
+
+        if(scaleAnimations)
+            transform.DOScale(scaleOnHover, scaleTransition).SetEase(scaleEase);
 
     }
 
     public void Swap(float dir = 1)
     {
+        if (!swapAnimations)
+            return;
+
         DOTween.Kill(2, true);
         shakeParent.DOPunchRotation((Vector3.forward * swapRotationAngle) * dir, swapTransition, swapVibrato, 1).SetId(3);
     }
 
     private void BeginDrag(Card card)
     {
-        transform.DOScale(scaleOnSelect, scaleTransition).SetEase(scaleEase);
+        if(scaleAnimations)
+            transform.DOScale(scaleOnSelect, scaleTransition).SetEase(scaleEase);
+
         canvas.overrideSorting = true;
     }
 
@@ -175,7 +184,9 @@ public class CardVisual : MonoBehaviour
 
     private void PointerEnter(Card card)
     {
-        transform.DOScale(scaleOnHover, scaleTransition).SetEase(scaleEase);
+        if(scaleAnimations)
+            transform.DOScale(scaleOnHover, scaleTransition).SetEase(scaleEase);
+
         DOTween.Kill(2, true);
         shakeParent.DOPunchRotation(Vector3.forward * hoverPunchAngle, hoverTransition, 20, 1).SetId(2);
     }
@@ -188,7 +199,8 @@ public class CardVisual : MonoBehaviour
 
     private void PointerUp(Card card, bool longPress)
     {
-        transform.DOScale(longPress ? scaleOnHover : scaleOnSelect, scaleTransition).SetEase(scaleEase);
+        if(scaleAnimations)
+            transform.DOScale(longPress ? scaleOnHover : scaleOnSelect, scaleTransition).SetEase(scaleEase);
         canvas.overrideSorting = false;
 
         visualShadow.localPosition = shadowDistance;
@@ -197,7 +209,8 @@ public class CardVisual : MonoBehaviour
 
     private void PointerDown(Card card)
     {
-        transform.DOScale(scaleOnSelect, scaleTransition).SetEase(scaleEase);
+        if(scaleAnimations)
+            transform.DOScale(scaleOnSelect, scaleTransition).SetEase(scaleEase);
             
         visualShadow.localPosition += (-Vector3.up * shadowOffset);
         shadowCanvas.overrideSorting = false;

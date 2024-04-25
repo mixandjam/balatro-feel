@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 7006996992505307320}
   - component: {fileID: 8110481357869007721}
   - component: {fileID: 7697484841366769644}
-  - component: {fileID: 502704179870035794}
   m_Layer: 5
   m_Name: Sprite
   m_TagString: Untagged
@@ -58,7 +57,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Material: {fileID: 2100000, guid: b7a6f0938af174d08a66011c1f8064e9, type: 2}
+  m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
@@ -66,8 +65,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: e63fba139e92744aca651dfeee7fe118, type: 3}
-  m_Type: 0
+  m_Sprite: {fileID: 21300000, guid: 072f9a3983fd642b18925f878f115f57, type: 3}
+  m_Type: 1
   m_PreserveAspect: 1
   m_FillCenter: 1
   m_FillMethod: 4
@@ -76,18 +75,6 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &502704179870035794
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1145312962996155630}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3c641e54aacd14965bb97c1f098f53cd, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &2017949772597159594
 GameObject:
   m_ObjectHideFlags: 0
@@ -192,8 +179,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: c3599bc8541a6436aa97608c7454f313, type: 3}
-  m_Type: 0
+  m_Sprite: {fileID: 21300000, guid: 072f9a3983fd642b18925f878f115f57, type: 3}
+  m_Type: 1
   m_PreserveAspect: 1
   m_FillCenter: 1
   m_FillMethod: 4
@@ -302,6 +289,7 @@ GameObject:
   - component: {fileID: 7120376734261528799}
   - component: {fileID: 7994647478966201829}
   - component: {fileID: 4132845374223140069}
+  - component: {fileID: -580308703452269557}
   m_Layer: 5
   m_Name: CardVisual 1
   m_TagString: Untagged
@@ -350,21 +338,29 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   parentCard: {fileID: 0}
-  visualShadow: {fileID: 9157190824811683565}
-  shakeParent: {fileID: 3449025543118524474}
-  tiltParent: {fileID: 5862976466474931636}
-  cardImage: {fileID: 7697484841366769644}
-  followSpeed: 28
-  rotationAmount: 85
-  rotationSpeed: 50
-  autoTiltAmount: 5
-  manualTiltAmount: 20
+  visualShadow: {fileID: 9157190824811683565, guid: bddd0263814164da396aa8d1438dd810, type: 3}
+  shakeParent: {fileID: 3449025543118524474, guid: bddd0263814164da396aa8d1438dd810, type: 3}
+  tiltParent: {fileID: 5862976466474931636, guid: bddd0263814164da396aa8d1438dd810, type: 3}
+  cardImage: {fileID: 7697484841366769644, guid: bddd0263814164da396aa8d1438dd810, type: 3}
+  followSpeed: 15
+  rotationAmount: 60
+  rotationSpeed: 20
+  autoTiltAmount: 15
+  manualTiltAmount: 30
   tiltSpeed: 40
-  scaleOnHover: 1.15
-  scaleOnSelect: 1.25
+  scaleAnimations: 0
+  scaleOnHover: 1.07
+  scaleOnSelect: 1.2
   scaleTransition: 0.15
   scaleEase: 27
-  curve: {fileID: 11400000, guid: 41cbd8028de364b88bbdecc05de1c91a, type: 2}
+  selectPunchAmount: 20
+  hoverPunchAngle: 5
+  hoverTransition: 0.15
+  swapAnimations: 1
+  swapRotationAngle: 20
+  swapTransition: 0.2
+  swapVibrato: 5
+  curve: {fileID: 11400000, guid: d8910e5a244574016877d731d0fb2c97, type: 2}
 --- !u!223 &4132845374223140069
 Canvas:
   m_ObjectHideFlags: 0
@@ -388,3 +384,15 @@ Canvas:
   m_SortingLayerID: 0
   m_SortingOrder: 1
   m_TargetDisplay: 0
+--- !u!225 &-580308703452269557
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7310339964073049012}
+  m_Enabled: 0
+  m_Alpha: 0
+  m_Interactable: 0
+  m_BlocksRaycasts: 0
+  m_IgnoreParentGroups: 0
