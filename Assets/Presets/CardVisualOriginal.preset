@@ -1,0 +1,115 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!181963792 &2655988077585873504
+Preset:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: CardVisualOriginal
+  m_TargetType:
+    m_NativeTypeID: 114
+    m_ManagedTypePPtr: {fileID: 11500000, guid: c73809c3b87e04a6dae1308b12ab4749, type: 3}
+    m_ManagedTypeFallback: 
+  m_Properties:
+  - target: {fileID: 0}
+    propertyPath: m_Enabled
+    value: 1
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_EditorHideFlags
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_EditorClassIdentifier
+    value: 
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: parentCard
+    value: 
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: visualShadow
+    value: 
+    objectReference: {fileID: 9157190824811683565, guid: bddd0263814164da396aa8d1438dd810, type: 3}
+  - target: {fileID: 0}
+    propertyPath: shakeParent
+    value: 
+    objectReference: {fileID: 3449025543118524474, guid: bddd0263814164da396aa8d1438dd810, type: 3}
+  - target: {fileID: 0}
+    propertyPath: tiltParent
+    value: 
+    objectReference: {fileID: 5862976466474931636, guid: bddd0263814164da396aa8d1438dd810, type: 3}
+  - target: {fileID: 0}
+    propertyPath: cardImage
+    value: 
+    objectReference: {fileID: 7697484841366769644, guid: bddd0263814164da396aa8d1438dd810, type: 3}
+  - target: {fileID: 0}
+    propertyPath: followSpeed
+    value: 25
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: rotationAmount
+    value: 70
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: rotationSpeed
+    value: 50
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: autoTiltAmount
+    value: 15
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: manualTiltAmount
+    value: 30
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: tiltSpeed
+    value: 40
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: scaleOnHover
+    value: 1.07
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: scaleOnSelect
+    value: 1.2
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: scaleTransition
+    value: 0.15
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: scaleEase
+    value: 27
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: selectPunchAmount
+    value: 20
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: hoverPunchAngle
+    value: 5
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: hoverTransition
+    value: 0.15
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: swapRotationAngle
+    value: 20
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: swapTransition
+    value: 0.2
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: swapVibrato
+    value: 5
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: curve
+    value: 
+    objectReference: {fileID: 11400000, guid: d4dd399fb2dab44429d866dc2259bb4b, type: 2}
+  m_ExcludedProperties: []

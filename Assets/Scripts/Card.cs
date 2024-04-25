@@ -13,6 +13,9 @@ public class Card : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHand
     private VisualCardsHandler visualHandler;
     private Vector3 offset;
 
+    [Header("Movement")]
+    [SerializeField] private float moveSpeedLimit = 50;
+
     [Header("Selection")]
     public bool selected;
     public float selectionOffset = 50;
@@ -54,7 +57,7 @@ public class Card : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHand
         {
             Vector2 targetPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition) - offset;
             Vector2 direction = (targetPosition - (Vector2)transform.position).normalized;
-            Vector2 velocity = direction * Mathf.Min(50, Vector2.Distance(transform.position, targetPosition) / Time.deltaTime);
+            Vector2 velocity = direction * Mathf.Min(moveSpeedLimit, Vector2.Distance(transform.position, targetPosition) / Time.deltaTime);
             transform.Translate(velocity * Time.deltaTime);
         }
     }

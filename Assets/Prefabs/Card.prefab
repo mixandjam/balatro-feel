@@ -60,6 +60,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 72d103f73c46c407db068681e2811968, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  moveSpeedLimit: 50
   selected: 0
   selectionOffset: 25
   cardVisualPrefab: {fileID: 7310339964073049012, guid: bddd0263814164da396aa8d1438dd810, type: 3}
