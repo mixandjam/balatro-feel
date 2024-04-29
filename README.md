@@ -17,7 +17,7 @@ These instructions will get you a copy of the project up and running on your loc
 
 ### Prerequisites
 
--  Unity ver. 2022.2 or higher
+-  Unity ver. 2022.3 or higher
 
 ### Running the project
 
